@@ -193,7 +193,7 @@ docker logs backend-lab3
 
 ## 🔗 Repo
 
-_(add GitHub link here if you're publishing it)_
+`https://github.com/ZEN5072/PR-LAB`
 
 ---
 
@@ -365,6 +365,8 @@ docker network inspect todo-net-lab3
 ---
 
 ## 🔗 Репозиторий
+
+`https://github.com/ZEN5072/PR-LAB`
 
 _(добавь ссылку на GitHub, если нужен шаблон — могу сделать)_
 
