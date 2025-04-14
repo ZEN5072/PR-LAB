@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ToDo List</title>
+</head>
+<body>
+<h1>ToDo List</h1>
+
+<form id="taskForm">
+    <input type="text" id="title" placeholder="New Task" required>
+    <button type="submit">Add</button>
+</form>
+
+<ul id="taskList"></ul>
+
+<script>
+async function loadTasks() {
+    try {
+        const res = await fetch('http://localhost:8000/tasks');
+        const tasks = await res.json();
+        const list = document.getElementById('taskList');
+        list.innerHTML = '';
+
+        tasks.forEach(task => {
+            const li = document.createElement('li');
+
+            const titleSpan = document.createElement('span');
+            titleSpan.textContent = `${task.title} [${task.completed ? '✓' : ' '}] `;
+            li.appendChild(titleSpan);
+
+            // ✅ Кнопка удаления
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = 'Удалить';
+            deleteBtn.onclick = async () => {
+                await fetch(`http://localhost:8000/tasks/${task.id}`, {
+                    method: 'DELETE'
+                });
+                loadTasks();
+            };
+            li.appendChild(deleteBtn);
+
+            // ✅ Кнопка редактирования
+            const editBtn = document.createElement('button');
+            editBtn.textContent = 'Редактировать';
+            editBtn.onclick = () => {
+                const newTitle = prompt('Новое название задачи:', task.title);
+                if (newTitle !== null && newTitle.trim() !== '') {
+                    fetch(`http://localhost:8000/tasks/${task.id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ title: newTitle, completed: task.completed })
+                    }).then(loadTasks);
+                }
+            };
+            li.appendChild(editBtn);
+
+            // ✅ Чекбокс "выполнено"
+            const toggleBtn = document.createElement('button');
+            toggleBtn.textContent = task.completed ? 'Сделать активной' : 'Завершить';
+            toggleBtn.onclick = async () => {
+                await fetch(`http://localhost:8000/tasks/${task.id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title: task.title, completed: !task.completed })
+                });
+                loadTasks();
+            };
+            li.appendChild(toggleBtn);
+
+            list.appendChild(li);
+        });
+    } catch (err) {
+        console.error("Ошибка при загрузке задач:", err);
+    }
+}
+
+document.getElementById('taskForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const title = document.getElementById('title').value.trim();
+    if (!title) return;
+
+    await fetch('http://localhost:8000/tasks', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({title: title, completed: false})
+    });
+
+    document.getElementById('title').value = '';
+    loadTasks();
+});
+
+loadTasks();
+</script>
+</body>
+</html>
