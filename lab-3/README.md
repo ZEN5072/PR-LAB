@@ -1,5 +1,5 @@
-# 📦 Lab #3 — ToDo List Web App in Docker 
-(Without Docker Compose) EN
+# 📦 Lab #3 — ToDo List Web App in Docker EN
+(Without Docker Compose)
 
 ## 🎯 Goal of the Lab
 
@@ -213,8 +213,8 @@ This is a complete solution fully aligned with the course requirements (PR).
 ---
 
 
-# 📦 Лабораторная работа №3 — ToDo List в Docker 
-(без Docker Compose) RU
+# 📦 Лабораторная работа №3 — ToDo List в Docker RU
+(без Docker Compose) 
 
 ## 🧾 Цель работы
 
